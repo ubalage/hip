@@ -1,0 +1,31 @@
+Report
+
+I picked the Hip challenge from the combinatorial search cathegory for this task. 
+
+This game is a "misere" (the first player to occupy a complete edge loses) positional game where the vertex set of 
+the hypergraph is the set of 81 fields while the edges of the graph are the 4-tuples determining a square.
+
+My base idea was to implement a penalty function on the vertices that tells us which to choose (the smaller the penalty 
+the better to choose the field).
+For this, a sum of penalties were assigned to each unoccupied vertex depending on the set of squares incident to it. For 
+each incident square a certain number was added to the field's penalty depending on the "threat" the square poses.
+The set of squares can be divided into 4 groups: 
+  - squares with both red and blue vertices
+  - squares with some red and no blue vertices (1-3 red, the rest is white/empty)
+  - squares with some blue and no red vertices
+  - squares with no coloured vertices
+The first type of square does not contribute to the sum as such squares could not be monochromatic.
+For each other type there is a possibility that later this square will determine the outcome of the game, I tried to 
+assign values accordingly. For example, if we play as red, the penalty of an empty field incident to a square with 3 
+red vetices should be huge to discourage picking this field and losing the game.
+
+We should also consider that the hypergraph is not regular, therefore one should choose a vertex with as small degree as 
+possible. While this goal can be (at least to some extent) satisfied using a more complex penalty function, I found that
+by keeping the penalty function relatively simpler and picking a field with minimum penalty as close to a corner as 
+possible one can actually obtain better scores.
+
+I should also mention that while my code uses a simple uniform distribution to pick from a list of equally good 
+candidates, there might be a better way, but considering anything more complex would've taken significantly more time.
+
+After some optimization of its parameters, the above algorithm actually scored 64.81 out of 100 against other bots,
+placing it at the 5th position of the challenge's leaderboard.
